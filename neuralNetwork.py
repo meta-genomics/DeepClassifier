@@ -3,18 +3,61 @@ from tensorflow import keras
 from keras import layers
 from extractFeatures import *
 import sklearn.metrics as metrics
-import numpy as np
-from keras.utils import np_utils
 import random
+import os
+import argparse
+
+parser = argparse.ArgumentParser(description='Taxonomic assignation using neural networks.')
+parser.add_argument('--epochs', metavar='-e', type=int,
+                    help='Number of epochs for tensor flow training')
+
+parser.add_argument('--batchSize', metavar='-b', type=int, 
+                    help='Batch size for tensor flow training')
+
+parser.add_argument('--path', metavar='-p',
+                    help='Path for read filest')
+
+parser.add_argument('--fileList', metavar='-f',
+                    help='Read file list including only R1 paired end')
+
+
+args = parser.parse_args()
+
+epochs = args.epochs
+batchSize = args.batchSize
+path = args.path
+fileList = args.fileList
+
+if epochs == None:
+    epochs = 30
+
+if batchSize == None:
+    batchSize = 60
+
+if path == None:
+    path = ''
+
+if fileList == None:
+    print("fileList is an obligatory parameter")
+    exit()
+
+print(f"epochs:   \t{epochs}")
+print(f"batchSize:\t{batchSize}")
+print(f"path:     \t{path}")
+print(f"fileList: \t{fileList}")
+#print(args)
+exit()
+          
 
 # parameters for tensor flow
 epochs = 30
 batchSize = 64
-
 # path where reads are stored
 path = '/mnt/d/data/genomics/unam/maribel'
+readFileList = 'fileList.txt'
+
 # list of files to be processed
-fileList = open( os.path.join(path,"fileList.txt"))
+fileList = open( os.path.join(path,readFileList))
 fileNames = list()
 # pre pend the path to all the files
 for line in fileList:
